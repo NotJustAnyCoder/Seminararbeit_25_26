@@ -33,7 +33,14 @@ void loop() {
   Wire.requestFrom(mag_enc_add, 2);
 
   if(Wire.available() == 2){
+    byte byte_1 = Wire.read();
+    byte byte_2 = Wire.read();
 
+    float angle = ((byte_2 << 8) | byte_1) & 0x0FFF;
+    float real_angle = angle * (360/4096);
+
+    // Serial.println("Angle: " + String(real_angle));
+    Serial.println(real_angle);
   }
   
 
