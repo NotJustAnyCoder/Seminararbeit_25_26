@@ -13,18 +13,21 @@ void setup() {
 void loop() {
   Wire.beginTransmission(mag_enc_add);
 
-  Wire.write(angle_add);
-  Wire.endTransmission(false); //MUY IMPORTANTNE
-  Wire.requestFrom(mag_enc_add, 1);
+  if(Serial.available() > 0){
+    Serial.readString();
+    Wire.write(status_add);
+    Wire.endTransmission(false); //MUY IMPORTANTNE
+    Wire.requestFrom(mag_enc_add, 1);
 
-  if(Wire.available() == 1){
-    byte status = Wire.read();
+    if(Wire.available() == 1){
+      byte status = Wire.read();
 
-    if(status & 0x20) Serial.println("MD");
-    if(status & 0x10) Serial.println("MC");
-    if(status & 0x08) Serial.println("ML");
-
+      if(status & 0x20) Serial.println("✅ Magnet detected.");
+      if(status & 0x10) Serial.println("⚠️ Magnet too weak.");
+      if(status & 0x08) Serial.println("⚠️ Magnet too strong.");
+    }
   }
+
   delay(100);
 
   /*
