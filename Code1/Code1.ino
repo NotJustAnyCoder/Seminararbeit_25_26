@@ -11,10 +11,9 @@ void setup() {
 }
 
 void loop() {
-  Wire.beginTransmission(mag_enc_add);
-
   if(Serial.available() > 0){
     Serial.readString();
+    Wire.beginTransmission(mag_enc_add);
     Wire.write(status_add);
     Wire.endTransmission(false); //MUY IMPORTANTNE
     Wire.requestFrom(mag_enc_add, 1);
@@ -28,6 +27,8 @@ void loop() {
     }
   }
 
+  Wire.beginTransmission(mag_enc_add);
+  Wire.beginTransmission(mag_enc_add);
   Wire.write(angle_add);
   Wire.endTransmission(false);
   Wire.requestFrom(mag_enc_add, 2);
@@ -36,17 +37,14 @@ void loop() {
     byte byte_1 = Wire.read();
     byte byte_2 = Wire.read();
 
-    float angle = ((byte_2 << 8) | byte_1) & 0x0FFF;
-    float real_angle = angle * (360/4096);
+    float angle = ((byte_1 << 8) | byte_2) & 0x0FFF;
+    float real_angle = angle * (360.0/4096.0);
 
     // Serial.println("Angle: " + String(real_angle));
     Serial.println(real_angle);
   }
   
-
   delay(100);
-
-
 }
 
 //Made by Mäx
