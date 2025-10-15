@@ -18,17 +18,15 @@ BLDCDriver3PWM bldc_driver = BLDCDriver3PWM(phase_1, phase_2, phase_3);
 // Config BLDC
 // XING-E Motor
 int xing_pole_pairs = 7; //14 Poles
-int xing_phase_resistance = 1;
+int xing_phase_resistance = 0.05;
 int xing_kv = 1800;
-
 // Badu Motor
 int badu_pole_pairs = 7 //14 Poles
-int badu_phase_resistance = 1;
+int badu_phase_resistance = 0.05;
 int badu_kv = 360;
-
 // Ufo Motor
 int jufo_pole_paris = 0;
-int ufo_phase_resistance = 0;
+int ufo_phase_resistance = 0.05;
 int ufo_kv = 0;
 
 BLDCMotor bldc_motor = BLDCMotor(xing_pole_pairs, xing_phase_resistance, xing_kv);
@@ -44,10 +42,15 @@ void setup() {
   bldc_driver.init()
 
   // BLDC Motor Setup
-  
+  bldc_motor.linkSensor(&mag_enc);
+  bldc_motor.linkDriver(&bldc_driver);
+  bldc_motor.controller = MotionControlType::velocity;
+  bldc_motor.init();
+
+  // FOC
+  bldc_motor.initFOC();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
+  
 }
