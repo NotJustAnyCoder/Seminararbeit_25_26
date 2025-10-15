@@ -32,6 +32,8 @@ int ufo_kv = 0;
 BLDCMotor bldc_motor = BLDCMotor(xing_pole_pairs, xing_phase_resistance, xing_kv);
 
 void setup() {
+  Serial.begin(115200);
+
   // Encoder Setup
   mag_enc.init();
 
@@ -52,5 +54,9 @@ void setup() {
 }
 
 void loop() {
-  
+  // FOC
+  bldc_motor.loopFOC();
+
+  // Move Motor with velocity of 2rad/s
+  bldc_motor.move(2);
 }
