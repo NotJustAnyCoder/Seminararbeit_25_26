@@ -2,10 +2,11 @@
 #include <SimpleFOC.h>
 
 // Config magnetic encoder
-int mag_enc_pin = 1;
 int mag_enc_res = 12;
+int enc_bites = 2;
+#define enc_add 0x36
 #define angle_reg 0x0E
-MagneticSensorSPI mag_enc = MagneticSensorSPI(mag_enc_pin, mag_enc_res, angle_reg);
+MagneticSensorI2C mag_enc = MagneticSensorI2C(enc_add, mag_enc_res, angle_reg, enc_bites);
 
 // Config BLDC Driver
 // ⚠️ Only PWM Pins
@@ -25,11 +26,11 @@ int badu_pole_pairs = 7; //14 Poles
 int badu_phase_resistance = 0.05;
 int badu_kv = 360;
 // Ufo Motor
-int jufo_pole_pairs = 14;
+int ufo_pole_pairs = 14;
 int ufo_phase_resistance = 0.05;
 int ufo_kv = 1400;
 
-BLDCMotor bldc_motor = BLDCMotor(jufo_pole_pairs, ufo_phase_resistance, ufo_kv);
+BLDCMotor bldc_motor = BLDCMotor(ufo_pole_pairs, ufo_phase_resistance, ufo_kv);
 
 void setup() {
   Serial.begin(115200);
