@@ -25,9 +25,9 @@ int badu_pole_pairs = 7; //14 Poles
 int badu_phase_resistance = 0.05;
 int badu_kv = 360;
 // Ufo Motor
-int jufo_pole_paris = 0;
+int jufo_pole_paris = 14;
 int ufo_phase_resistance = 0.05;
-int ufo_kv = 0;
+int ufo_kv = 1400;
 
 BLDCMotor bldc_motor = BLDCMotor(xing_pole_pairs, xing_phase_resistance, xing_kv);
 
