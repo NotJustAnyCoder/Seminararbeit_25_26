@@ -51,6 +51,7 @@ void setup() {
 void loop() {  
   // Motor Loop
   bldc_motor.move(move_value);
+  Serial.println(move_value);
 
   // Comms Loop
   comms.run();
