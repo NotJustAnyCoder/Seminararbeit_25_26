@@ -22,6 +22,10 @@ move_value = 0;
 void setup() {
   Serial.begin(12500);
 
+  // Commander Startup
+  Commander comms = Commander(Serial, "\n", false);
+  comms.add("M", move);
+
   // Motor Startup
   bldc_motor.linkDriver(&bldc_driver);
   bldc_motor.voltage_align_sensor = align_voltage;
@@ -36,11 +40,18 @@ void setup() {
 
   Serial.println("Setup finished: Running Loop");
   Serial.println("Type Mx to move the motor.");
-
 }
 
 void loop() {
+  // Motor Loop
   bldc_motor.move(move_value);
+
+  // Comms Loop
+  comms.run();
+}
+
+void move(char* move_vaL_comms){
+  bldc_motor.move(move_vaL_comms);
 }
 
 //Made by Mäx
