@@ -1,7 +1,7 @@
 #include <SimpleFOC.h>
 
 // Comms Setup
-Commander comms = Commander();
+Commander comms = Commander(Serial, "\n", true);
 
 // Motor Setup
 float motor_voltage = 1.00;
@@ -20,6 +20,9 @@ float move_value = 2.00;
 
 void setup() {
   Serial.begin(12500);
+
+  // Check nFT Setup
+  pinMode(7, INPUT);
 
   // Commander Startup
   comms.add('M', move);
@@ -50,11 +53,11 @@ void loop() {
   bldc_motor.move(move_value);
 
   // Comms Loop
-  comms.run(Serial);
+  comms.run();
 
   // Check 
   if(digitalRead(7) == LOW){
-    Serial.println("! ERROR !")
+    Serial.println("! ERROR !");
   }
 }
 
