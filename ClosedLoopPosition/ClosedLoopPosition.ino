@@ -1,0 +1,66 @@
+#include <SimpleFOC.h>
+
+// Comms Setup
+Commander comms = Commander(Serial, '\n', true);
+
+// Motor Setup
+float motor_voltage = 1.0;
+float align_voltage = 3.00;
+int num_magnet_pairs = 7;
+BLDCMotor bldc_motor = BLDCMotor(num_magnet_pairs);
+
+// Motor PID
+bldc_motor.PID_velocity.P = 0.2;
+bldc_motor.PID_velocity.I = 20;
+bldc_motor.PID_velocity.D = 0.001;
+
+bldc_motor.PID_velocity.D = 0.001;
+
+
+
+// Driver Setup
+float driver_voltage = 1.0;
+BLDCDriver3PWM bldc_driver = BLDCDriver3PWM(2, 3, 4, 6);  // With RPI Pico W, I used the EN pin
+
+
+void setup() {
+  Serial.begin(12500);
+
+  // Check nFT Setup
+  pinMode(7, INPUT);
+
+  // // Driver Startup
+  // SimpleFOCDebug::enable(&Serial);
+  // // bldc_driver.pwm_frequency = 20000;
+  // bldc_driver.voltage_power_supply = 15;
+  // bldc_driver.voltage_limit = driver_voltage;
+  // bldc_driver.init();
+  // // bldc_driver.enable();
+
+  // // Motor Startup
+  // bldc_motor.linkDriver(&bldc_driver);
+  // // bldc_motor.voltage_sensor_align = align_voltage;
+  // bldc_motor.voltage_limit = motor_voltage;
+  // bldc_motor.controller = MotionControlType::velocity_openloop;
+  // bldc_motor.init();
+
+}
+
+void loop() {  
+
+
+  // Check 
+  if(digitalRead(7) == LOW){
+    Serial.println("! ERROR !");
+  }
+}
+
+void setup() {
+  // put your setup code here, to run once:
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+}
