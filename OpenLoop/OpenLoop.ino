@@ -11,7 +11,7 @@ int num_magnet_pairs = 7;
 BLDCMotor bldc_motor = BLDCMotor(num_magnet_pairs);
 
 // Driver Setup
-float driver_voltage = 1,0;
+float driver_voltage = 1.0;
 
 BLDCDriver3PWM bldc_driver = BLDCDriver3PWM(2, 3, 4, 6);  // With RPI Pico W, I used the EN pin
 
