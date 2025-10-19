@@ -4,19 +4,19 @@
 Commander comms = Commander(Serial, '\n', true);
 
 // Motor Setup
-float motor_voltage = 1.00;
+float motor_voltage = 1.0;
 float align_voltage = 3.00;
 int num_magnet_pairs = 7;
 
 BLDCMotor bldc_motor = BLDCMotor(num_magnet_pairs);
 
 // Driver Setup
-float driver_voltage = 15;
+float driver_voltage = 1,0;
 
 BLDCDriver3PWM bldc_driver = BLDCDriver3PWM(2, 3, 4, 6);  // With RPI Pico W, I used the EN pin
 
 // Move Setup
-float move_value = 2.00;
+float move_value = 2.0;
 
 void setup() {
   Serial.begin(12500);
@@ -29,13 +29,6 @@ void setup() {
   comms.add('V', motor_volt);
   comms.add('D', driver_volt);
 
-  // Motor Startup
-  bldc_motor.linkDriver(&bldc_driver);
-  // bldc_motor.voltage_sensor_align = align_voltage;
-  bldc_motor.voltage_limit = motor_voltage;
-  bldc_motor.controller = MotionControlType::velocity_openloop;
-  // bldc_motor.init();
-  
   // Driver Startup
   SimpleFOCDebug::enable(&Serial);
   // bldc_driver.pwm_frequency = 20000;
@@ -44,6 +37,13 @@ void setup() {
   bldc_driver.init();
   // bldc_driver.enable();
 
+  // Motor Startup
+  bldc_motor.linkDriver(&bldc_driver);
+  // bldc_motor.voltage_sensor_align = align_voltage;
+  bldc_motor.voltage_limit = motor_voltage;
+  bldc_motor.controller = MotionControlType::velocity_openloop;
+  bldc_motor.init();
+
   Serial.println("--Setup finished: Running Loop--");
   Serial.println("Type Mx to move the motor, Vx to change motor voltage and Vx to change driver voltage.");
 }
@@ -51,7 +51,7 @@ void setup() {
 void loop() {  
   // Motor Loop
   bldc_motor.move(move_value);
-  Serial.println(move_value);
+  // Serial.println(move_value);
 
   // Comms Loop
   comms.run();
