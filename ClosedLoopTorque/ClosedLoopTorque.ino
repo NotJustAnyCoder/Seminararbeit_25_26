@@ -46,7 +46,7 @@ void setup() {
   bldc_motor.controller = MotionControlType::torque;
   // motor.useMonitoring(Serial);
   bldc_motor.init();
-  bldc_motor.initFoc();
+  bldc_motor.initFOC();
 
 
 }
