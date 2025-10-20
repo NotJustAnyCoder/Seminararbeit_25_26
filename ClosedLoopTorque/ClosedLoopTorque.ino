@@ -5,10 +5,13 @@ Commander comms = Commander(Serial, '\n', true);
 
 // Motor Startup
 int num_magnet_pairs = 7;
-int phase_resistance = 0.15;
-int kv = 360;
+float phase_resistance = 0.05;
+int kv = 1900;
+
+// int num_magnet_pairs = 7;
+// float phase_resistance = 0.15;
+// int kv = 360;
 BLDCMotor bldc_motor = BLDCMotor(num_magnet_pairs, phase_resistance, kv);
-bldc_motor.torque_controller = TorqueControlType::voltage;
 
 // Driver Starutp
 BLDCDriver3PWM bldc_driver = BLDCDriver3PWM(2, 3, 4, 6);
@@ -20,7 +23,7 @@ MagneticSensorI2C mag_enc = MagneticSensorI2C(0x36, 12, 0x0E, 2);
 float move_value = 2.0;
 
 void setup() {
-  Serial.begin(12500);
+  Serial.begin(115200);
 
   // Check nFT Setup
   pinMode(7, INPUT);
@@ -36,6 +39,7 @@ void setup() {
   bldc_driver.init();
 
   // Motor Setup
+  bldc_motor.torque_controller = TorqueControlType::voltage;
   bldc_motor.linkSensor(&mag_enc);
   bldc_motor.linkDriver(&bldc_driver);
   bldc_motor.torque_controller = TorqueControlType::voltage;
@@ -53,7 +57,7 @@ void loop() {
 
   // Motor Loop
   bldc_motor.loopFOC();
-  motor.move(move_value);
+  bldc_motor.move(move_value);
 
   
   // Comms Loop
