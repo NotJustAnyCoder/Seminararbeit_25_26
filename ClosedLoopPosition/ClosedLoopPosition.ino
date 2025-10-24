@@ -69,14 +69,30 @@ void setup() {
   delay(1000);
 }
 
+// angle set point variable
+float target_angle = 1;
+// timestamp for changing direction
+long timestamp_us = _micros();
+
 void loop() {  
 
+  // each one second
+  if(_micros() - timestamp_us > 1e6) {
+      timestamp_us = _micros();
+      // inverse angle
+      target_angle = -target_angle;   
+  }
+
+  // main FOC algorithm function
+  bldc_motor.loopFOC();
+
+  // Motion control function
+  bldc_motor.move(target_angle);
 
 
 
 
 
-  
   // Mag Enc update
   mag_enc.update();
   Serial.println(bldc_motor.shaftAngle());
