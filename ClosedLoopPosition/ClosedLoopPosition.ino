@@ -10,9 +10,9 @@ int num_magnet_pairs = 7;
 BLDCMotor bldc_motor = BLDCMotor(num_magnet_pairs);
 
 // Motor PID
-bldc_motor.PID_velocity.P = 0.2;
-bldc_motor.PID_velocity.I = 20;
-bldc_motor.PID_velocity.D = 0.001;
+// bldc_motor.PID_velocity.P = 0.2;
+// bldc_motor.PID_velocity.I = 20;
+// bldc_motor.PID_velocity.D = 0.001;
 
 // Driver Setup
 float driver_voltage = 1.0;
@@ -26,6 +26,9 @@ void setup() {
 
   // Check nFT Setup
   pinMode(7, INPUT);
+
+  // Mag Enc Setup
+  mag_enc.init();
 
   // // Driver Startup
   // SimpleFOCDebug::enable(&Serial);
@@ -45,7 +48,12 @@ void setup() {
 }
 
 void loop() {  
+  // Mag Enc update
+  mag_enc.update();
 
+  Serial.print("-----------------------------");
+  Serial.println(mag_enc.getAngle());
+  Serial.println(mag_enc.getVelocity());
 
   // Check 
   if(digitalRead(7) == LOW){
