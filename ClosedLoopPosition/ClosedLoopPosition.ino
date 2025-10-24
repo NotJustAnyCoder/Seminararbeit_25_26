@@ -5,17 +5,17 @@
 Commander comms = Commander(Serial, '\n', true);
 
 // Motor Setup
-float motor_voltage = 3.0;
+float motor_voltage = 7.0;
 float align_voltage = 3.00;
 int num_magnet_pairs = 7;
-float phase_res = 0.5;
-int kv = 1900;
+float phase_res = 0.15;
+int kv = 360;
 
 float move_value = 0;
 BLDCMotor bldc_motor = BLDCMotor(num_magnet_pairs, phase_res, kv);
 
 // Driver Setup
-float driver_voltage = 3.0;
+float driver_voltage = 1.0;
 BLDCDriver3PWM bldc_driver = BLDCDriver3PWM(2, 3, 4, 6);  // With RPI Pico W, I used the EN pin
 
 // Encoder Setup
