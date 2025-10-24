@@ -1,4 +1,5 @@
 #include <SimpleFOC.h>
+#include <Wire.h>
 
 // Comms Setup
 Commander comms = Commander(Serial, '\n', true);
@@ -23,12 +24,15 @@ MagneticSensorI2C mag_enc = MagneticSensorI2C(0x36, 12, 0x0E, 2);
 
 void setup() {
   Serial.begin(12500);
-
+  
   // Check nFT Setup
   pinMode(7, INPUT);
 
   // Mag Enc Setup
-  mag_enc.init();
+  Wire.begin();
+  Wire.setSDA(0);
+  Wire.setSCL(1);
+  mag_enc.init(&Wire);
 
   // // Driver Startup
   // SimpleFOCDebug::enable(&Serial);
@@ -51,7 +55,6 @@ void loop() {
   // Mag Enc update
   mag_enc.update();
 
-  Serial.print("-----------------------------");
   Serial.println(mag_enc.getAngle());
   Serial.println(mag_enc.getVelocity());
 
