@@ -15,7 +15,7 @@ float move_value = 0;
 BLDCMotor bldc_motor = BLDCMotor(num_magnet_pairs, phase_res, kv);
 
 // Driver Setup
-float driver_voltage = 1.0;
+float driver_voltage = 4.0;
 BLDCDriver3PWM bldc_driver = BLDCDriver3PWM(2, 3, 4, 6);  // With RPI Pico W, I used the EN pin
 
 // Encoder Setup
@@ -26,6 +26,7 @@ void setup() {
 
   // Command Setup
   comms.add('M', move);
+  comms.add('V', volt);
 
   
   // Check nFT Setup //
@@ -85,6 +86,7 @@ void loop() {
   bldc_motor.move(move_value);
   // Serial.println(move_value);
 
+  bldc_driver.voltage_limit = driver_voltage;
 
   // Mag Enc update
   mag_enc.update();
@@ -99,6 +101,10 @@ void loop() {
 
 void move(char* move_val_comms){
   move_value = atof(move_val_comms);
+}
+
+void volt(char* d){
+  driver_voltage = atof(d);
 }
 
 // Made by Mäx
