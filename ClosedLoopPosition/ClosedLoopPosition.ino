@@ -8,8 +8,8 @@ Commander comms = Commander(Serial, '\n', true);
 float motor_voltage = 7.0;
 float align_voltage = 3.00;
 int num_magnet_pairs = 7;
-float phase_res = 0.15;
-int kv = 360;
+float phase_res = 0.05;
+int kv = 1900;
 
 float move_value = 0;
 BLDCMotor bldc_motor = BLDCMotor(num_magnet_pairs, phase_res, kv);
@@ -83,12 +83,12 @@ void loop() {
   // Motor loop
   bldc_motor.loopFOC();
   bldc_motor.move(move_value);
-  Serial.println(move_value);
+  // Serial.println(move_value);
 
 
   // Mag Enc update
   mag_enc.update();
-  // Serial.println(bldc_motor.shaftAngle());
+  Serial.println(bldc_motor.shaftAngle());
   // Serial.println(mag_enc.getVelocity());
 
   // Check 
