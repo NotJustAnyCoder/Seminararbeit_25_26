@@ -1,4 +1,5 @@
 // Shows angle of magnetic encoder and status, to show status enter something in the command line
+// Remove Wire.setSDA and .setSCL for Arduino
 #include <Wire.h>
 
 #define mag_enc_add 0x36
@@ -7,6 +8,8 @@
 
 void setup() {
   Serial.begin(9600);
+  Wire.setSDA(0);
+  Wire.setSCL(1);
   Wire.begin();
 }
 

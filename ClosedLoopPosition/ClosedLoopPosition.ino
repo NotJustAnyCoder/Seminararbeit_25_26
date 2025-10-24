@@ -14,14 +14,12 @@ bldc_motor.PID_velocity.P = 0.2;
 bldc_motor.PID_velocity.I = 20;
 bldc_motor.PID_velocity.D = 0.001;
 
-bldc_motor.PID_velocity.D = 0.001;
-
-
-
 // Driver Setup
 float driver_voltage = 1.0;
 BLDCDriver3PWM bldc_driver = BLDCDriver3PWM(2, 3, 4, 6);  // With RPI Pico W, I used the EN pin
 
+// Encoder Setup
+MagneticSensorI2C mag_enc = MagneticSensorI2C(0x36, 12, 0x0E, 2);
 
 void setup() {
   Serial.begin(12500);
@@ -53,14 +51,4 @@ void loop() {
   if(digitalRead(7) == LOW){
     Serial.println("! ERROR !");
   }
-}
-
-void setup() {
-  // put your setup code here, to run once:
-
-}
-
-void loop() {
-  // put your main code here, to run repeatedly:
-
 }
