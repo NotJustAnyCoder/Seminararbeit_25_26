@@ -4,12 +4,17 @@
 // Comms Setup
 Commander comms = Commander(Serial, '\n', true);
 
+
+
+
 // Motor Setup
 float motor_voltage = 1.0;
 float align_voltage = 3.00;
 int num_magnet_pairs = 7;
 float phase_res = 0.5;
 int kv = 1900;
+
+float target_pos = 0;
 BLDCMotor bldc_motor = BLDCMotor(num_magnet_pairs, phase_res, kv);
 
 // Driver Setup
@@ -21,6 +26,10 @@ MagneticSensorI2C mag_enc = MagneticSensorI2C(0x36, 12, 0x0E, 2);
 
 void setup() {
   Serial.begin(112500);
+
+  // Command Setup
+  comms.add('M', move);
+
   
   // Check nFT Setup //
   pinMode(7, INPUT);
@@ -69,28 +78,11 @@ void setup() {
   delay(1000);
 }
 
-// angle set point variable
-float target_angle = 1;
-// timestamp for changing direction
-long timestamp_us = _micros();
 
 void loop() {  
-
-  // each one second
-  if(_micros() - timestamp_us > 1e6) {
-      timestamp_us = _micros();
-      // inverse angle
-      target_angle = -target_angle;   
-  }
-
-  // main FOC algorithm function
-  bldc_motor.loopFOC();
-
-  // Motion control function
-  bldc_motor.move(target_angle);
-
-
-
+  // Motor loop
+  bldc_bldc.loopFOC();
+  bldc_motor.move(target_pos);
 
 
   // Mag Enc update
@@ -103,3 +95,11 @@ void loop() {
     Serial.println("! ERROR !");
   }
 }
+
+
+void move(char* move_val_comms){
+  move_value = atof(move_val_comms);
+}
+
+
+// Made by Mäx
