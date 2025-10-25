@@ -45,7 +45,7 @@ void setup() {
   bldc_motor.init();
 
   Serial.println("--Setup finished: Running Loop--");
-  Serial.println("Type Mx to move the motor, Vx to change motor voltage and Vx to change driver voltage.");
+  Serial.println("Type Mx to move the motor, Vx to change motor voltage and Dx to change driver voltage.");
 }
 
 void loop() {  

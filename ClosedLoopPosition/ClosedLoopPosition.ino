@@ -5,7 +5,7 @@
 Commander comms = Commander(Serial, '\n', true);
 
 // Motor Setup
-float motor_voltage = 7.0;
+float motor_voltage = 3.0;
 float align_voltage = 3.00;
 int num_magnet_pairs = 7;
 float phase_res = 0.05;
@@ -15,14 +15,14 @@ float move_value = 0;
 BLDCMotor bldc_motor = BLDCMotor(num_magnet_pairs, phase_res, kv);
 
 // Driver Setup
-float driver_voltage = 4.0;
+float driver_voltage = 1.0;
 BLDCDriver3PWM bldc_driver = BLDCDriver3PWM(2, 3, 4, 6);  // With RPI Pico W, I used the EN pin
 
 // Encoder Setup
 MagneticSensorI2C mag_enc = MagneticSensorI2C(0x36, 12, 0x0E, 2);
 
 void setup() {
-  Serial.begin(112500);
+  Serial.begin(115200);
 
   // Command Setup
   comms.add('M', move);
