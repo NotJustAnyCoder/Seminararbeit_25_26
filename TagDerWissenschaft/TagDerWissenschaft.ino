@@ -94,11 +94,6 @@ void loop() {
 
     Serial.println(real_angle);
   }
-
-  // Check 
-  if(digitalRead(7) == LOW){
-    Serial.println("! ERROR !");
-  }
 }
 
 void move(char* move_val_comms){
