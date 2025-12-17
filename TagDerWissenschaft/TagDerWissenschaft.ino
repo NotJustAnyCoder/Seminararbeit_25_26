@@ -1,77 +1,53 @@
-// Code documetation at: https://docs.simplefoc.com/code
-#include <SimpleFOC.h>
+// Shows angle of magnetic encoder and status, to show status enter something in the command line
+// Remove Wire.setSDA and .setSCL for Arduino
+#include <Wire.h>
 
-// Config magnetic encoder
-int mag_enc_res = 12;
-int enc_bites = 2;
-#define enc_add 0x36
-#define angle_reg 0x0E
-MagneticSensorI2C mag_enc = MagneticSensorI2C(enc_add, mag_enc_res, angle_reg, enc_bites);
-
-// Config BLDC Driver
-// ⚠️ Only PWM Pins
-int phase_1 = 9;
-int phase_2 = 10;
-int phase_3 = 11;
-int bldc_voltage = 19; //External battery
-BLDCDriver3PWM bldc_driver = BLDCDriver3PWM(phase_1, phase_2, phase_3, 1);
-
-// Config BLDC
-// XING-E Motor
-int xing_pole_pairs = 7; //14 Poles
-int xing_phase_resistance = 0.05;
-int xing_kv = 1800;
-// Badu Motor
-int badu_pole_pairs = 7; //14 Poles
-int badu_phase_resistance = 0.05;
-int badu_kv = 360;
-// Ufo Motor
-int ufo_pole_pairs = 7;
-int ufo_phase_resistance = 0.05;
-int ufo_kv = 1900;
-
-BLDCMotor bldc_motor = BLDCMotor(ufo_pole_pairs, ufo_phase_resistance, ufo_kv);
+#define mag_enc_add 0x36
+#define status_add 0x0B
+#define angle_add 0x0E
 
 void setup() {
-  Serial.begin(115200);
-
-
-  SimpleFOCDebug::enable(&Serial);
-
-  // Encoder Setup
-  mag_enc.init();
-
-  // BLDC Driver Setup
-  bldc_driver.pwm_frequency = 25000;
-  bldc_driver.voltage_power_supply = bldc_voltage;
-  bldc_driver.voltage_limit = 35;
-  bldc_driver.init();
-
-  // BLDC Motor Setup
-  bldc_motor.linkSensor(&mag_enc);
-  bldc_motor.linkDriver(&bldc_driver);
-
-  bldc_motor.useMonitoring(Serial);;
-
-  // bldc_motor.controller = MotionControlType::velocity;
-  bldc_motor.controller = MotionControlType::angle_openloop;
-
-  bldc_motor.init();
-
-  // FOC
-  bldc_motor.initFOC();
+  Serial.begin(9600);
+  Wire.setSDA(0);
+  Wire.setSCL(1);
+  Wire.begin();
 }
 
 void loop() {
-  mag_enc.update();
-  Serial.println(mag_enc.getAngle());
+  if(Serial.available() > 0){
+    Serial.readString();
+    Wire.beginTransmission(mag_enc_add);
+    Wire.write(status_add);
+    Wire.endTransmission(false); //MUY IMPORTANTNE
+    Wire.requestFrom(mag_enc_add, 1);
 
-  // FOC
-  bldc_motor.loopFOC();
+    if(Wire.available() == 1){
+      byte status = Wire.read();
 
-  // Move Motor with velocity of 2rad/s
-  bldc_motor.move(20);
+      if(status & 0x20) Serial.println("✅ Magnet detected.");
+      if(status & 0x10) Serial.println("⚠️ Magnet too weak.");
+      if(status & 0x08) Serial.println("⚠️ Magnet too strong.");
+    }
+  }
 
-  // Monitoring
-  bldc_motor.monitor();
+  Wire.beginTransmission(mag_enc_add);
+  Wire.beginTransmission(mag_enc_add);
+  Wire.write(angle_add);
+  Wire.endTransmission(false);
+  Wire.requestFrom(mag_enc_add, 2);
+
+  if(Wire.available() == 2){
+    byte byte_1 = Wire.read();
+    byte byte_2 = Wire.read();
+
+    float angle = ((byte_1 << 8) | byte_2) & 0x0FFF;
+    float real_angle = angle * (360.0/4096.0);
+
+    // Serial.println("Angle: " + String(real_angle));
+    Serial.println(real_angle);
+  }
+  
+  delay(100);
 }
+
+//Made by Mäx
